@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expandable Cards</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f0f0f0;
+      }
+
+      .container {
+        display: flex;
+        width: 80%;
+        height: 550px;
+        overflow: hidden;
+        position: relative;
+        transition: width 200ms ease;
+      }
+
+      .card {
+        flex: 1;
+        margin: 10px;
+        background: #e0ecff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 2s ease, opacity 2s ease;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        position: relative;
+        color: #0a1d37;
+        z-index: 1;
+      }
+
+      .card.expanded {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 10;
+        opacity: 1;
+        transition: width 2s ease, transform 2s ease;
+      }
+
+      .card.hidden {
+        opacity: 0;
+        width: 0;
+        flex: none;
+        transition: width 2s ease, opacity 2s ease;
+      }
+
+      .card:hover {
+        cursor: pointer;
+        transition: all 4.5s ease;
+      }
+
+      .card:hover {
+        cursor: pointer;
+        transition: all 4.5s ease;
+      }
+
+      .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-align: center;
+        transition: all 4.5s ease;
+      }
+
+      .card-footer {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 4px;
+        transition: all 4.5s ease;
+      }
+
+      .card-footer span,
+      .card-footer button {
+        margin: 10px 0;
+      }
+
+      .card-footer .buy-now {
+        background-color: #ffcc00;
+        color: #000;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      .card-body {
+        flex: 1;
+        padding: 20px;
+        text-align: left;
+        transition: all 2s ease;
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+      }
+
+      .card .vertical-line {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 30%;
+        width: 1px;
+        background-color: black;
+        display: none;
+      }
+
+      .card:hover .vertical-line {
+        display: block;
+      }
+
+      #card2 .vertical-line {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 30%;
+        width: 1px;
+        background-color: white;
+        display: none;
+      }
+
+      #card2:hover .vertical-line {
+        display: block;
+      }
+
+      .card-body .additional-content {
+        display: none;
+        transition: all 2s ease;
+      }
+
+      .card:hover .card-body .additional-content {
+        flex: 1;
+        margin: 20px 40px;
+        padding: 10px 120px;
+        display: block;
+      }
+
+      .additional-content ul {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(120px, 2fr));
+        list-style-type: none;
+        gap: 20px;
+        padding: 0;
+        margin: 0;
+      }
+
+      #card2 .additional-content li {
+        color: white;
+      }
+
+      .card-body .original-content {
+        flex: 1;
+        max-width: 250px;
+        height: 100%;
+      }
+
+      .card .buy-now {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #ffcc00;
+        color: #000;
+        border-radius: 5px;
+        width: 70%;
+        text-decoration: none;
+        text-align: center;
+        border-radius: 12px;
+        max-width: 300px;
+      }
+
+      .card .price {
+        font-size: 2em;
+        font-weight: bold;
+        margin: 10px 0;
+        color: #072341;
+      }
+
+      .card .terms {
+        display: block;
+        margin-top: 10px;
+        font-size: 0.8rem;
+        text-decoration: underline;
+        color: #072341;
+      }
+
+      #card2 {
+        background-color: #072341;
+        color: white;
+      }
+
+      .original-content {
+        height: 100%;
+      }
+
+      #card2 .price {
+        color: white;
+      }
+
+      #card2 .terms {
+        color: white;
+      }
+
+      .card-body:hover {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .card .duration {
+        color: #6b6a6a;
+        border: 2px solid #6b6a6a;
+        padding: 5px 24px;
+        border-radius: 15px;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+      }
+
+      #card2 .duration {
+        color: white;
+        border: 2px solid white;
+        padding: 5px 24px;
+        border-radius: 15px;
+      }
+
+      .card:hover .card-header {
+        height: 100%;
+        width: 100%;
+      }
+
+      .card-body .original-content {
+        flex: 1;
+        height: 100%;
+      }
+
+      p {
+        max-width: 300px;
+      }
+
+      .nested-parent {
+        display: flex;
+        flex-direction: column;
+        font-weight: bold;
+      }
+
+      .nested-sub-heading {
+        margin-top: 10px;
+        margin-left: 1rem;
+        font-weight: 500;
+        color: gray;
+      }
+
+      #nested-child {
+        display: flex;
+        padding: 10px;
+        flex-direction: column;
+        font-weight: 400;
+        margin-left: 0.8rem;
+      }
+      .parent-tick {
+        height: 1em;
+      }
+
+      .list-with-icon {
+        width: 100%;
+        display: flex;
+        align-items: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="card" id="card1">
+        <div class="vertical-line"></div>
+        <div class="card-body">
+          <div class="original-content">
+            <div class="card-header">
+              <h2>Ultimate</h2>
+            </div>
+            <span class="duration">12 Months</span>
+            <p>
+              Soar your business’ online presence to new heights with our 12
+              month package. This package is the perfect way to establish a
+              consistent schedule with new and returning customers through
+              personalized content on social media.
+            </p>
+            <div class="card-footer">
+              <span class="price">$4,500</span>
+              <button class="buy-now">Buy Now</button>
+              <span class="terms">Terms & conditions</span>
+            </div>
+          </div>
+          <div class="additional-content">
+            <ul>
+              <li class="nested-parent">
+                <div class="list-with-icon">
+                  <img class="parent-tick" src="tick.svg" alt="tick" />
+                  <span> Social Marketing Strategy Creation </span>
+                </div>
+              </li>
+
+              <li class="nested-parent">
+                <div class="list-with-icon">
+                  <img class="parent-tick" src="tick.svg" alt="tick" />
+                  <span>Social Ad Promotion & Boosting </span>
+                </div>
+                <span class="nested-sub-heading">
+                  Posts on Meta and /or Linkedin</span
+                >
+              </li>
+
+              <li class="nested-parent">
+                <div class="list-with-icon">
+                  <img class="parent-tick" src="tick.svg" alt="tick" />
+                  <span> High Quality Video Production & Preparation </span>
+                </div>
+                <span class="nested-sub-heading">Video Shooting</span>
+                <ul id="nested-child">
+                  <li>
+                    <div>
+                      <img src="ellipse.svg" alt="tick" />
+                      <span> Drone Footage </span>
+                    </div>
+                  </li>
+                  <li>
+                    <div>
+                      <img src="ellipse.svg" alt="tick" />
+                      <span>Staff Interviews </span>
+                    </div>
+                  </li>
+                  <li>
+                    <div>
+                      <img src="ellipse.svg" alt="tick" />
+                      <span>Client Testimonials </span>
+                    </div>
+                  </li>
+                  <li>
+                    <div>
+                      <img src="ellipse.svg" alt="tick" />
+                      <span>Product Showcases</span>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+
+              <li class="nested-parent">
+                <div class="list-with-icon">
+                  <img class="parent-tick" src="tick.svg" alt="tick" />
+                  <span>Monthly Reporting </span>
+                </div>
+              </li>
+
+              <li class="nested-parent">
+                <div class="list-with-icon">
+                  <img class="parent-tick" src="tick.svg" alt="tick" />
+                  <span> Personalized Content Creation </span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="card" id="card2">
+        <div class="vertical-line"></div>
+        <div class="card-body">
+          <div class="original-content">
+            <div class="card-header">
+              <h2>Ultimate</h2>
+            </div>
+            <span class="duration">12 Months</span>
+            <p>
+              Soar your business’ online presence to new heights with our 12
+              month package. This package is the perfect way to establish a
+              consistent schedule with new and returning customers through
+              personalized content on social media.
+            </p>
+            <div class="card-footer">
+              <span class="price">$4,500</span>
+              <button class="buy-now">Buy Now</button>
+              <span class="terms">Terms & conditions</span>
+            </div>
+          </div>
+          <div class="additional-content">
+            <ul>
+              <li class="nested-parent">
+                <div class="list-with-icon">
+                  <img class="parent-tick" src="tick.svg" alt="tick" />
+                  <span> Social Marketing Strategy Creation </span>
+                </div>
+              </li>
+
+              <li class="nested-parent">
+                <div class="list-with-icon">
+                  <img class="parent-tick" src="tick.svg" alt="tick" />
+                  <span>Social Ad Promotion & Boosting </span>
+                </div>
+                <span class="nested-sub-heading">
+                  Posts on Meta and /or Linkedin</span
+                >
+              </li>
+
+              <li class="nested-parent">
+                <div class="list-with-icon">
+                  <img class="parent-tick" src="tick.svg" alt="tick" />
+                  <span> High Quality Video Production & Preparation </span>
+                </div>
+                <span class="nested-sub-heading">Video Shooting</span>
+                <ul id="nested-child">
+                  <li>
+                    <div>
+                      <img src="ellipse.svg" alt="tick" />
+                      <span> Drone Footage </span>
+                    </div>
+                  </li>
+                  <li>
+                    <div>
+                      <img src="ellipse.svg" alt="tick" />
+                      <span>Staff Interviews </span>
+                    </div>
+                  </li>
+                  <li>
+                    <div>
+                      <img src="ellipse.svg" alt="tick" />
+                      <span>Client Testimonials </span>
+                    </div>
+                  </li>
+                  <li>
+                    <div>
+                      <img src="ellipse.svg" alt="tick" />
+                      <span>Product Showcases</span>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+
+              <li class="nested-parent">
+                <div class="list-with-icon">
+                  <img class="parent-tick" src="tick.svg" alt="tick" />
+                  <span>Monthly Reporting </span>
+                </div>
+              </li>
+
+              <li class="nested-parent">
+                <div class="list-with-icon">
+                  <img class="parent-tick" src="tick.svg" alt="tick" />
+                  <span> Personalized Content Creation </span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="card" id="card3">
+        <div class="vertical-line"></div>
+        <div class="card-body">
+          <div class="original-content">
+            <div class="card-header">
+              <h2>Ultimate</h2>
+            </div>
+            <span class="duration">12 Months</span>
+            <p>
+              Soar your business’ online presence to new heights with our 12
+              month package. This package is the perfect way to establish a
+              consistent schedule with new and returning customers through
+              personalized content on social media.
+            </p>
+            <div class="card-footer">
+              <span class="price">$4,500</span>
+              <button class="buy-now">Buy Now</button>
+              <span class="terms">Terms & conditions</span>
+            </div>
+          </div>
+          <div class="additional-content">
+            <ul>
+              <li class="nested-parent">
+                <div class="list-with-icon">
+                  <img class="parent-tick" src="tick.svg" alt="tick" />
+                  <span> Social Marketing Strategy Creation </span>
+                </div>
+              </li>
+
+              <li class="nested-parent">
+                <div class="list-with-icon">
+                  <img class="parent-tick" src="tick.svg" alt="tick" />
+                  <span>Social Ad Promotion & Boosting </span>
+                </div>
+                <span class="nested-sub-heading">
+                  Posts on Meta and /or Linkedin</span
+                >
+              </li>
+
+              <li class="nested-parent">
+                <div class="list-with-icon">
+                  <img class="parent-tick" src="tick.svg" alt="tick" />
+                  <span> High Quality Video Production & Preparation </span>
+                </div>
+                <span class="nested-sub-heading">Video Shooting</span>
+                <ul id="nested-child">
+                  <li>
+                    <div>
+                      <img src="ellipse.svg" alt="tick" />
+                      <span> Drone Footage </span>
+                    </div>
+                  </li>
+                  <li>
+                    <div>
+                      <img src="ellipse.svg" alt="tick" />
+                      <span>Staff Interviews </span>
+                    </div>
+                  </li>
+                  <li>
+                    <div>
+                      <img src="ellipse.svg" alt="tick" />
+                      <span>Client Testimonials </span>
+                    </div>
+                  </li>
+                  <li>
+                    <div>
+                      <img src="ellipse.svg" alt="tick" />
+                      <span>Product Showcases</span>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+
+              <li class="nested-parent">
+                <div class="list-with-icon">
+                  <img class="parent-tick" src="tick.svg" alt="tick" />
+                  <span>Monthly Reporting </span>
+                </div>
+              </li>
+
+              <li class="nested-parent">
+                <div class="list-with-icon">
+                  <img class="parent-tick" src="tick.svg" alt="tick" />
+                  <span> Personalized Content Creation </span>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const cards = document.querySelectorAll(".card");
+
+      cards.forEach((card) => {
+        card.addEventListener("mouseover", () => {
+          cards.forEach((c) => {
+            c.classList.remove("expanded");
+            c.classList.add("hidden");
+          });
+          card.classList.remove("hidden");
+          card.classList.add("expanded");
+        });
+
+        card.addEventListener("mouseleave", () => {
+          cards.forEach((c) => c.classList.remove("expanded", "hidden"));
+        });
+      });
+    </script>
+  </body>
+</html>
